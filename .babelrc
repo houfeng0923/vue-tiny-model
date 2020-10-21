@@ -1,0 +1,10 @@
+{
+  "plugins": ["istanbul"],
+  "presets": [
+    ["env", {
+      "targets": {
+        "node": "current"
+      }
+    }]
+  ],
+}

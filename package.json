@@ -1,0 +1,68 @@
+{
+  "name": "vue-tiny-model",
+  "version": "0.0.1",
+  "description": "tiny model layer for vue3",
+  "license": "MIT",
+  "main": "vue-tiny-model.js",
+  "module": "vue-tiny-model.es.js",
+  "keywords": [
+    "vue",
+    "vue3",
+    "reactivity",
+    "model"
+  ],
+  "files": [
+    "vue-tiny-model.js",
+    "vue-tiny-model.es.js"
+  ],
+  "types": "dist/src/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/houfeng0923/vue-tiny-model/issues"
+  },
+  "homepage": "https://github.com/houfeng0923/vue-tiny-model",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/houfeng0923/vue-tiny-model.git"
+  },
+  "author": {
+    "name": "houfeng",
+    "email": "houfeng0923@gmail.com",
+    "url": "https://github.com/houfeng0923"
+  },
+  "dependencies": {
+    "@vue/reactivity": "^3.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/register": "^7.0.0",
+    "@types/chai": "^4.1.6",
+    "@types/lodash": "^4.14.145",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.0",
+    "@types/validator": "^9.4.2",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
+    "array-permutation": "^0.2.0",
+    "babel-plugin-istanbul": "^5.1.0",
+    "babel-preset-env": "^1.7.0",
+    "chai": "^4.2.0",
+    "eslint": "^7.11.0",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
+    "rollup": "^1.19.2",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-commonjs": "^10.0.2",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-typescript2": "^0.19.2",
+    "source-map-support": "^0.5.9",
+    "ts-node": "^8.0.2",
+    "typescript": "^4.0.3"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "lint": "eslint ./src/**/*.ts",
+    "test": "tsc && nyc mocha --opts test/mocha.opts",
+    "prepublishOnly": "yarn test && yarn build"
+  }
+}
