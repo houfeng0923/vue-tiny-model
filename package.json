@@ -57,7 +57,7 @@
   "scripts": {
     "build": "rollup -c",
     "lint": "eslint ./src/**/*.ts",
-    "test": "tsc && jest",
-    "prepublishOnly": "yarn test && yarn build"
+    "test": "jest",
+    "prepublishOnly": "tsc && yarn test && yarn build"
   }
 }

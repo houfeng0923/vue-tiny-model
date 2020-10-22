@@ -26,6 +26,7 @@ type IOrder = {
 describe('Model', () => {
 
   beforeEach(() => {
+    /**/
   });
 
   describe('define', () => {
