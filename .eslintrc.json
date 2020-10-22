@@ -16,16 +16,7 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
-    "comma-dangle": [
-      "error",
-      {
-        "arrays": "always-multiline",
-        "objects": "always-multiline",
-        "imports": "always-multiline",
-        "exports": "always-multiline",
-        "functions": "ignore"
-      }
-    ],
+    "comma-dangle": "off",
     "no-constant-condition": "warn",
     "no-dupe-args": "error",
     "no-dupe-keys": "error",

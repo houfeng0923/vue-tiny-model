@@ -1,6 +1,0 @@
---bail
---slow 20
---full-trace
---reporter spec
---require ./test/run.js
-./test/**/*.spec.ts

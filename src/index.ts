@@ -1,2 +1,2 @@
-export  *  from './Model/define';
+export  *  from './model/define';
 
