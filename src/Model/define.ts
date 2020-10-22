@@ -77,8 +77,8 @@ export function defineModel<T extends ModelProps>(defineProps: DefineProps<T>): 
   } as ModelConstructor<T>;
 }
 
-export function bind<T>(options: Options<T>): TypeFlag<T>;
-export function bind<T>(options: Getter<T>): TypeFlag<T>;
+export function bind<T = any>(options: Options<T>): TypeFlag<T>;
+export function bind<T = any>(options: Getter<T>): TypeFlag<T>;
 export function bind<T>(options: any): TypeFlag<T> {
   let get: Getter<T>;
   let set: Setter<T> | undefined;
