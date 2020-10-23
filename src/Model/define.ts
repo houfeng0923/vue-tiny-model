@@ -23,9 +23,11 @@ type TypeFlag<T> = {
 } & Options<T>;
 
 
-type DefineProps<T> = Partial<{
+type DefineProps<T> = {
   [K in keyof T]: any;
-}>;
+};
+
+type InstanceProps<T> = Partial<DefineProps<T>>;
 
 type CombinedModelInstance<T> = UnwrapRef<T> & {
   reopen: () => void;
@@ -33,17 +35,18 @@ type CombinedModelInstance<T> = UnwrapRef<T> & {
 
 
 interface ModelConstructor<T> {
-  new(props: DefineProps<T>): CombinedModelInstance<T>;
+  new(props: InstanceProps<T>): CombinedModelInstance<T>;
 }
 
 
 export function defineModel<T extends ModelProps>(defineProps: DefineProps<T>): ModelConstructor<T> {
 
-  function instance<T>(props: DefineProps<T>): UnwrapRef<T> {
+  function instance<T>(props: InstanceProps<T>): UnwrapRef<T> {
     const context = {} as ModelContext;
     const modelObj = {} as ModelProps;
     const methods = {} as ModelProps;
     const binds = {} as ModelProps;
+    validateProps(defineProps, props);
     Object.entries(defineProps).forEach(([k, v]) => {
       v = props[k] !== undefined ? props[k] : v;
       if (typeof v === 'function') {
@@ -95,6 +98,11 @@ export function bind<T>(options: any): TypeFlag<T> {
   };
 }
 
+function validateProps<S, T>(definedProps: DefineProps<T>, instanceProps: InstanceProps<S>) {
+  Object.keys(instanceProps).forEach((k) => {
+    if (definedProps[k] === undefined) {throw new Error(`${k} is not declared prop`);}
+  });
+}
 
 function createComputedProp<T>(context: ModelContext, v: Options<T>): ComputedRef<T> {
   const get: Getter<any> = v.get;
