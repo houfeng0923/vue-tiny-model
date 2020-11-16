@@ -1,5 +1,5 @@
 import { effect } from '@vue/reactivity';
-import { bind, defineModel } from '../../src';
+import { bind, defineModel } from '../src';
 
 type IQuote = {
   bid: number;

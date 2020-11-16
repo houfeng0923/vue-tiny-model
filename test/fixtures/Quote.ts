@@ -1,4 +1,4 @@
-import { getter, model } from '../../../src/model/Model';
+import { getter, model } from '../../src';
 
 
 @model
