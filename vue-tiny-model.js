@@ -795,6 +795,7 @@ function defineModel(defineProps) {
         const modelObj = {};
         const methods = {};
         const binds = {};
+        validateProps(defineProps, props);
         Object.entries(defineProps).forEach(([k, v]) => {
             v = props[k] !== undefined ? props[k] : v;
             if (typeof v === 'function') {
@@ -841,6 +842,17 @@ function bind(options) {
         set,
     };
 }
+function validateProps(definedProps, instanceProps) {
+    if (!instanceProps) {
+        return;
+    }
+    const whiteList = Object.keys(definedProps);
+    Object.keys(instanceProps).forEach((k) => {
+        if (whiteList.indexOf(k) === -1) {
+            throw new Error(`${k} is not declared prop`);
+        }
+    });
+}
 function createComputedProp(context, v) {
     const get = v.get;
     const set = v.set;
@@ -852,5 +864,73 @@ function createComputedProp(context, v) {
 // todo
 // function listen() {}
 
+const computedMap = new WeakMap();
+/**
+ * a decorate for collect get accessor in a class definition.
+ * if not use it , getter is no reactive field, in other word,  filed can't be cached.
+ */
+function getter(target, propertyKey) {
+    target = target.constructor;
+    let cache = computedMap.get(target);
+    if (!cache) {
+        computedMap.set(target, (cache = new Set()));
+    }
+    if (!cache.has(propertyKey)) {
+        cache.add(propertyKey);
+    }
+}
+/**
+ * turn a normal class to reactive class.
+ * all defined fields without accessor (getter/setter)  will be auto tracking.
+ * for getter , you can use `@getter` for it;
+ * @param constructor
+ */
+function model(constructor) {
+    const Base = function (props) {
+        const proxy = instance(constructor, props);
+        return proxy;
+    };
+    Base.prototype.constructor = constructor;
+    return Base;
+}
+function validateProps$1(definedProps, instanceProps) {
+    if (!instanceProps) {
+        return;
+    }
+    const whiteList = Object.keys(definedProps);
+    Object.keys(instanceProps).forEach((k) => {
+        if (whiteList.indexOf(k) === -1) {
+            throw new Error(`${k} is not declared prop`);
+        }
+    });
+}
+function instance(constructor, props) {
+    var _a;
+    const base = new constructor(props);
+    validateProps$1(base, props);
+    const context = {
+        model: reactive(base),
+    };
+    const proto = Object.getPrototypeOf(base);
+    const getterKeys = computedMap.get(constructor) || new Set();
+    (_a = Array.from(getterKeys)) === null || _a === void 0 ? void 0 : _a.forEach((k) => {
+        const descriptor = Object.getOwnPropertyDescriptor(proto, k);
+        const get = (descriptor === null || descriptor === void 0 ? void 0 : descriptor.get) && (() => { var _a; return (_a = descriptor === null || descriptor === void 0 ? void 0 : descriptor.get) === null || _a === void 0 ? void 0 : _a.apply(context.model); });
+        const set = (descriptor === null || descriptor === void 0 ? void 0 : descriptor.set) && ((v) => { var _a; return (_a = descriptor === null || descriptor === void 0 ? void 0 : descriptor.set) === null || _a === void 0 ? void 0 : _a.call(context.model, v); });
+        if (get) {
+            const value = set ? computed({ get, set }) : computed(get);
+            Object.defineProperty(context.model, k, {
+                value,
+                configurable: true,
+                enumerable: true,
+                writable: true,
+            });
+        }
+    });
+    return context.model;
+}
+
 exports.bind = bind;
 exports.defineModel = defineModel;
+exports.getter = getter;
+exports.model = model;
