@@ -99,8 +99,10 @@ export function bind<T>(options: any): TypeFlag<T> {
 }
 
 function validateProps<S, T>(definedProps: DefineProps<T>, instanceProps: InstanceProps<S>) {
+  if (!instanceProps) {return;}
+  const whiteList = Object.keys(definedProps);
   Object.keys(instanceProps).forEach((k) => {
-    if (definedProps[k] === undefined) {throw new Error(`${k} is not declared prop`);}
+    if (whiteList.indexOf(k) === -1) { throw new Error(`${k} is not declared prop`); }
   });
 }
 

@@ -3,6 +3,8 @@
 
 ### Usage
 
+#### defineModel()
+
 ```
 import { bind, defineModel } from 'vue-tiny-model';
 
@@ -20,12 +22,37 @@ const Quote = defineModel<IQuote>({
   }),
 });
 
-const raw = response.data;
-
-const quote = new Quote(raw);
+const quote = new Quote({bid: 1, ask: 2);
 
 
 ```
+
+#### class API
+
+```
+// model/Quote.ts
+
+import { model, getter } from 'vue-tiny-model';
+
+@model
+export class Quote {
+  bid = 0;
+  ask = 0;
+
+  @getter
+  get mid() {
+    return (this.bid + this.ask) / 2;
+  }
+}
+
+// app.ts
+
+const quote = new Quote({bid:1, ask: 2});
+
+
+
+```
+
 
 ### Development
 
